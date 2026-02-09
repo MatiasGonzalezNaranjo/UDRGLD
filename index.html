@@ -4,60 +4,139 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Clothing Store</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {font-family: Arial, sans-serif; margin: 0; padding: 0;}
+        header {background: #333; color: #fff; padding: 10px; text-align: center;}
+        nav {margin: 10px;}
+        nav a {margin: 0 15px; color: #fff; text-decoration: none;}
+        .container {padding: 20px;}
+        .product {border: 1px solid #ccc; padding: 10px; margin: 10px;}
+        .cart {background: #fff; border: 1px solid #ccc; padding: 10px;}
+        footer {text-align: center; margin-top: 20px;}
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Welcome to Our Clothing Store</h1>
-        <nav>
-            <ul>
-                <li><a href="#home">Home</a></li>
-                <li><a href="#products">Products</a></li>
-                <li><a href="#about">About Us</a></li>
-                <li><a href="#contact">Contact</a></li>
-                <li><a href="#faq">FAQ</a></li>
-                <li><a href="#cart">Cart</a></li>
-                <li><a href="#login">Login</a></li>
-                <li><a href="#register">Register</a></li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <section id="home">
-            <h2>Home</h2>
-            <p>Explore our latest collections!</p>
-        </section>
-        <section id="products">
-            <h2>Products</h2>
-            <p>Browse through our wide range of clothing.</p>
-        </section>
-        <section id="about">
-            <h2>About Us</h2>
-            <p>Learn more about our brand and values.</p>
-        </section>
-        <section id="contact">
-            <h2>Contact</h2>
-            <p>Get in touch with us for any inquiries.</p>
-        </section>
-        <section id="faq">
-            <h2>FAQ</h2>
-            <p>Your questions answered.</p>
-        </section>
-        <section id="cart">
-            <h2>Your Cart</h2>
-            <p>Items you have selected for purchase.</p>
-        </section>
-        <section id="login">
-            <h2>Login</h2>
-            <p>Access your account.</p>
-        </section>
-        <section id="register">
-            <h2>Register</h2>
-            <p>Create a new account.</p>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2026 Clothing Store. All rights reserved.</p>
-    </footer>
+
+<header>
+    <h1>Welcome to Our Clothing Store</h1>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#catalog">Catalog</a>
+        <a href="#cart">Cart</a>
+        <a href="#login">Login/Register</a>
+    </nav>
+</header>
+
+<div class="container">
+
+    <section id="home">
+        <h2>Home</h2>
+        <p>Quick access to our product catalog.</p>
+        <a href="#catalog">View Catalog</a>
+    </section>
+
+    <section id="catalog">
+        <h2>Product Catalog</h2>
+        <input type="text" id="search" placeholder="Search by name...">
+        <div>
+            <label for="color">Color:</label>
+            <select id="color">
+                <option value="">All</option>
+                <option value="red">Red</option>
+                <option value="blue">Blue</option>
+                <option value="green">Green</option>
+            </select>
+
+            <label for="gender">Gender:</label>
+            <select id="gender">
+                <option value="">All</option>
+                <option value="men">Men</option>
+                <option value="women">Women</option>
+            </select>
+
+            <label for="type">Type:</label>
+            <select id="type">
+                <option value="">All</option>
+                <option value="shirt">Shirt</option>
+                <option value="pants">Pants</option>
+            </select>
+        </div>
+        <div class="product-list">
+            <!-- Example Product -->
+            <div class="product">
+                <h3>Sample Product</h3>
+                <p>Description of the product.</p>
+                <p>Price: $29.99</p>
+                <button onclick="addToCart('Sample Product', 29.99)">Add to Cart</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="cart" class="cart">
+        <h2>Shopping Cart</h2>
+        <ul id="cartItems"></ul>
+        <p>Total: $<span id="totalPrice">0</span></p>
+        <button onclick="checkout()">Proceed to Checkout</button>
+    </section>
+
+    <section id="payment">
+        <h2>Payment</h2>
+        <form id="paymentForm">
+            <label for="name">Name:</label>
+            <input type="text" id="name" required>
+            <label for="address">Shipping Address:</label>
+            <input type="text" id="address" required>
+            <label for="paymentMethod">Payment Method:</label>
+            <select id="paymentMethod">
+                <option value="credit">Credit Card</option>
+                <option value="paypal">PayPal</option>
+            </select>
+            <button type="submit">Confirm Purchase</button>
+        </form>
+    </section>
+
+    <section id="login">
+        <h2>Login/Register</h2>
+        <form id="loginForm">
+            <label for="email">Email:</label>
+            <input type="email" id="email" required>
+            <label for="password">Password:</label>
+            <input type="password" id="password" required>
+            <button type="submit">Login</button>
+            <button type="button" onclick="toggleRegister()">Create Account</button>
+        </form>
+    </section>
+
+    <section id="profile">
+        <h2>User Profile</h2>
+        <p>Profile Information</p>
+    </section>
+
+</div>
+
+<footer>
+    <p>&copy; 2026 Clothing Store</p>
+</footer>
+
+<script>
+    const cartItems = [];
+    let totalPrice = 0;
+
+    function addToCart(product, price) {
+        cartItems.push(product);
+        totalPrice += price;
+        document.getElementById('cartItems').innerHTML += `<li>${product} - $${price.toFixed(2)}</li>`;
+        document.getElementById('totalPrice').innerText = totalPrice.toFixed(2);
+    }
+
+    function checkout() {
+        alert('Proceeding to checkout...');
+    }
+
+    function toggleRegister() {
+        // Logic to toggle between login and register
+    }
+</script>
+
 </body>
 </html>
