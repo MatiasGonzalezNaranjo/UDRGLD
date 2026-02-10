@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UDRGLD - Tienda de Moda Premium</title>
+    
+    <!-- Estilos CSS -->
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/layout.css">
+    <link rel="stylesheet" href="css/components.css">
+    <link rel="stylesheet" href="css/responsive.css">
+</head>
+<body>
+    <!-- HEADER GLOBAL -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-container" onclick="showInterface('home')">
+                <svg class="logo" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="35" cy="50" rx="22" ry="35" fill="none" stroke="#d4af37" stroke-width="3"/>
+                    <ellipse cx="65" cy="50" rx="22" ry="35" fill="none" stroke="#d4af37" stroke-width="3"/>
+                </svg>
+                <h1 class="brand-name">UDRGLD</h1>
+            </div>
+
+            <nav class="navbar">
+                <a class="nav-link" onclick="showInterface('home')">Inicio</a>
+                <a class="nav-link" onclick="showInterface('catalog')">Catálogo</a>
+                <a class="nav-link" onclick="showInterface('profile')">Mi Perfil</a>
+                <a class="nav-link" onclick="showInterface('auth')">Cuenta</a>
+                <div class="cart-container" onclick="showInterface('cart')">
+                    <span class="cart-icon">🛒</span>
+                    <span class="cart-badge" id="cartBadge">0</span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+        <!-- INTERFACE 1: HOME -->
+        <section id="home" class="interface active">
+            <div class="hero-section">
+                <h2 class="hero-title">UDRGLD</h2>
+                <p class="hero-subtitle">Elegancia y Lujo en Cada Prenda</p>
+                <button class="btn btn-primary btn-lg" onclick="showInterface('catalog')">
+                    Explorar Colección
+                </button>
+            </div>
+        </section>
+
+        <!-- INTERFACE 2: CATALOG -->
+        <section id="catalog" class="interface">
+            <div class="container">
+                <h2 class="section-title">Catálogo de Productos</h2>
+                
+                <div class="filters-container">
+                    <input type="text" id="searchInput" class="search-input" placeholder="Buscar por nombre..." onkeyup="filterProducts()">
+                    <select id="colorFilter" class="filter-select" onchange="filterProducts()">
+                        <option value="">Todos los colores</option>
+                        <option value="rojo">Rojo</option>
+                        <option value="azul">Azul</option>
+                        <option value="negro">Negro</option>
+                        <option value="blanco">Blanco</option>
+                        <option value="verde">Verde</option>
+                    </select>
+                    <select id="genderFilter" class="filter-select" onchange="filterProducts()">
+                        <option value="">Todos</option>
+                        <option value="hombre">Hombre</option>
+                        <option value="mujer">Mujer</option>
+                        <option value="unisex">Unisex</option>
+                    </select>
+                    <select id="typeFilter" class="filter-select" onchange="filterProducts()">
+                        <option value="">Todos los tipos</option>
+                        <option value="camiseta">Camiseta</option>
+                        <option value="pantalon">Pantalón</option>
+                        <option value="chaqueta">Chaqueta</option>
+                        <option value="vestido">Vestido</option>
+                        <option value="zapatos">Zapatos</option>
+                    </select>
+                </div>
+
+                <div class="products-grid" id="productsGrid"></div>
+            </div>
+        </section>
+
+        <!-- INTERFACE 3: PRODUCT DETAIL -->
+        <section id="product-detail" class="interface">
+            <div class="container">
+                <div class="product-detail-container">
+                    <div class="product-image-large" id="productImageLarge">👔</div>
+                    <div class="product-details">
+                        <h2 id="productDetailName" class="product-detail-name"></h2>
+                        <p id="productDetailPrice" class="product-detail-price"></p>
+                        <p id="productDetailDescription" class="product-detail-description"></p>
+
+                        <div class="product-options">
+                            <div class="option-group">
+                                <label class="option-label">Color:</label>
+                                <div class="option-values" id="colorOptionsDetail"></div>
+                            </div>
+
+                            <div class="option-group">
+                                <label class="option-label">Talla:</label>
+                                <div class="option-values" id="sizeOptionsDetail"></div>
+                            </div>
+
+                            <div class="option-group">
+                                <label class="option-label">Cantidad:</label>
+                                <div class="quantity-selector">
+                                    <button class="btn-quantity" onclick="decreaseQuantity()">−</button>
+                                    <input type="number" id="quantityInput" class="quantity-input" value="1" min="1">
+                                    <button class="btn-quantity" onclick="increaseQuantity()">+</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="product-actions">
+                            <button class="btn btn-primary" onclick="addToCart()">Añadir al Carrito</button>
+                            <button class="btn btn-secondary" onclick="buyNow()">Compra Inmediata</button>
+                        </div>
+
+                        <button class="btn btn-text" onclick="showInterface('catalog')">← Volver al Catálogo</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERFACE 4: CART -->
+        <section id="cart" class="interface">
+            <div class="container">
+                <h2 class="section-title">Carrito de Compra</h2>
+                
+                <div class="cart-items-container" id="cartItemsContainer">
+                    <div class="empty-state">Tu carrito está vacío</div>
+                </div>
+
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span id="subtotal">$0.00</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Envío:</span>
+                        <span id="shipping">$5.00</span>
+                    </div>
+                    <div class="summary-row summary-total">
+                        <span>Total:</span>
+                        <span id="total">$5.00</span>
+                    </div>
+                </div>
+
+                <div class="cart-actions">
+                    <button class="btn btn-primary btn-lg" onclick="showInterface('payment')">Proceder al Pago</button>
+                    <button class="btn btn-secondary btn-lg" onclick="showInterface('catalog')">Continuar Comprando</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERFACE 5: PAYMENT -->
+        <section id="payment" class="interface">
+            <div class="container">
+                <h2 class="section-title">Completar Compra</h2>
+                
+                <div class="payment-container">
+                    <form id="paymentForm" class="payment-form" onsubmit="submitPayment(event)">
+                        <!-- Cliente Info -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Datos Personales</h3>
+                            <div class="form-group">
+                                <label>Nombre Completo *</label>
+                                <input type="text" id="fullName" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Correo Electrónico *</label>
+                                <input type="email" id="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Teléfono *</label>
+                                <input type="tel" id="phone" required>
+                            </div>
+                        </div>
+
+                        <!-- Shipping Address -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Dirección de Envío</h3>
+                            <div class="form-group">
+                                <label>Dirección *</label>
+                                <input type="text" id="address" required>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Ciudad *</label>
+                                    <input type="text" id="city" required>
+                                </div>
+                                <div class="form-group">
+                                    <label>Código Postal *</label>
+                                    <input type="text" id="zipcode" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Departamento *</label>
+                                <input type="text" id="state" required>
+                            </div>
+                        </div>
+
+                        <!-- Payment Method -->
+                        <div class="form-section">
+                            <h3 class="form-section-title">Método de Pago</h3>
+                            <div class="form-group">
+                                <label>Tipo de Pago *</label>
+                                <select id="paymentMethod" required onchange="toggleCardFields()">
+                                    <option value="">Selecciona un método</option>
+                                    <option value="credit">Tarjeta de Crédito</option>
+                                    <option value="debit">Tarjeta Débito</option>
+                                    <option value="transfer">Transferencia Bancaria</option>
+                                    <option value="cash">Pago contra entrega</option>
+                                </select>
+                            </div>
+
+                            <div id="cardFields" style="display: none;">
+                                <div class="form-group">
+                                    <label>Número de Tarjeta</label>
+                                    <input type="text" id="cardNumber" placeholder="1234 5678 9012 3456" maxlength="19">
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label>Vencimiento (MM/AA)</label>
+                                        <input type="text" id="expiry" placeholder="12/25" maxlength="5">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>CVV</label>
+                                        <input type="text" id="cvv" placeholder="123" maxlength="3">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-lg">Confirmar Compra</button>
+                    </form>
+
+                    <!-- Payment Summary -->
+                    <div class="payment-summary">
+                        <h3>Resumen de Compra</h3>
+                        <div id="paymentSummaryItems"></div>
+                        <div class="summary-total" id="paymentTotal">Total: $0.00</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERFACE 6: AUTH -->
+        <section id="auth" class="interface">
+            <div class="auth-container">
+                <!-- LOGIN -->
+                <div class="auth-card">
+                    <h2 class="auth-title">Iniciar Sesión</h2>
+                    <form id="loginForm" class="auth-form" onsubmit="handleLogin(event)">
+                        <input type="email" class="form-input" placeholder="Correo electrónico" required>
+                        <input type="password" class="form-input" placeholder="Contraseña" required>
+                        <button type="submit" class="btn btn-primary btn-full">Iniciar Sesión</button>
+                        <div class="auth-divider">o</div>
+                        <p class="auth-hint">¿No tienes cuenta? Crea una arriba →</p>
+                        <a class="auth-link" onclick="showRecoveryForm()">¿Olvidaste tu contraseña?</a>
+                    </form>
+                </div>
+
+                <!-- REGISTER -->
+                <div class="auth-card">
+                    <h2 class="auth-title">Crear Cuenta</h2>
+                    <form id="registerForm" class="auth-form" onsubmit="handleRegister(event)">
+                        <input type="text" class="form-input" placeholder="Nombre completo" required>
+                        <input type="email" class="form-input" placeholder="Correo electrónico" required>
+                        <input type="password" class="form-input" placeholder="Contraseña" required>
+                        <input type="password" class="form-input" placeholder="Confirmar contraseña" required>
+                        <label class="checkbox-label">
+                            <input type="checkbox" required>
+                            <span>Acepto los términos y condiciones</span>
+                        </label>
+                        <button type="submit" class="btn btn-primary btn-full">Crear Cuenta</button>
+                    </form>
+                </div>
+
+                <!-- RECOVERY (Hidden) -->
+                <div id="recoveryForm" class="auth-card recovery-form" style="display: none;">
+                    <h2 class="auth-title">Recuperar Contraseña</h2>
+                    <form class="auth-form" onsubmit="handlePasswordRecovery(event)">
+                        <p class="recovery-hint">Ingresa tu correo y te enviaremos instrucciones para recuperar tu contraseña.</p>
+                        <input type="email" class="form-input" placeholder="Correo electrónico" required>
+                        <button type="submit" class="btn btn-primary btn-full">Enviar Instrucciones</button>
+                        <button type="button" class="btn btn-secondary btn-full" onclick="hideRecoveryForm()">Volver</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- INTERFACE 7: PROFILE -->
+        <section id="profile" class="interface">
+            <div class="container">
+                <h2 class="section-title">Mi Perfil</h2>
+                
+                <div class="profile-grid">
+                    <!-- Personal Info -->
+                    <div class="profile-card">
+                        <h3 class="card-title">Información Personal</h3>
+                        <div class="profile-item">
+                            <span class="label">Nombre:</span>
+                            <span id="profileName" class="value">-</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="label">Correo:</span>
+                            <span id="profileEmail" class="value">-</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="label">Teléfono:</span>
+                            <span id="profilePhone" class="value">-</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="label">Miembro desde:</span>
+                            <span id="profileDate" class="value">-</span>
+                        </div>
+                        <button class="btn btn-secondary btn-full" onclick="showInterface('auth')">Editar Información</button>
+                    </div>
+
+                    <!-- Addresses -->
+                    <div class="profile-card">
+                        <h3 class="card-title">Direcciones Guardadas</h3>
+                        <div id="addressesContainer"></div>
+                        <button class="btn btn-secondary btn-full">Agregar Dirección</button>
+                    </div>
+
+                    <!-- Orders History -->
+                    <div class="profile-card full-width">
+                        <h3 class="card-title">Historial de Pedidos</h3>
+                        <div id="ordersContainer"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2026 UDRGLD - Elegancia Pura | Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="js/storage.js"></script>
+    <script src="js/products.js"></script>
+    <script src="js/cart.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>
